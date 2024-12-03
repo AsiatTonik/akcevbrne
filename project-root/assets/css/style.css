@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%; 
+}
+
+.container {
+    display: grid;
+    grid-template-areas: 
+        "header header"
+        "sidebar main"
+        "footer footer";  
+    grid-template-columns: 250px 1fr;  
+    grid-template-rows: auto 1fr auto;  
+    min-height: 100vh; 
+}
+
+.header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #000;
+    color: #fff;
+    height: 80px;
+}
+
+.login-button {
+    background-color: #fff;
+    color: #000;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: #f4f4f4;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; 
+    height: 100%; 
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    display: block; 
+    margin: 0; 
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+
+.sidebar li:hover {
+    background-color: #ccc;  
+    color: #333;  
+}
+
+.main-content {
+    grid-area: main;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%; 
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.search-bar input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-bar .search-button {
+    padding: 0.5rem 1rem;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.event-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-image {
+    height: 150px;
+    background-color: #ddd;
+}
+
+.event-info {
+    padding: 1rem;
+}
+
+.event-info h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.more-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    width: 100%; 
+    grid-column: 1 / -1; 
+    margin-top: auto; 
+}
