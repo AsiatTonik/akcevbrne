@@ -1,14 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akce v Brně</title>
-    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/styling.css') ?>">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
+    <div class="hlavni-container">
+        <header class="hlavni-header">
             <h1>AKCE V BRNĚ</h1>
             <a href="http://localhost/pham/project-root/login">
             <button class="login-button">LOGIN</button>
@@ -24,7 +25,7 @@
                 <li>NÁZEV KATEGORIE</li>
             </ul>
         </aside>
-        <main class="main-content">
+        <main class="hlavni-content">
             <div class="search-bar">
                 <label for="from">OD</label>
                 <input type="date" id="from" name="from">
@@ -47,12 +48,18 @@
         </main>
 
         
-        <footer class="footer">
-            © 2024 Akce v Brně. Všechna práva vyhrazena.
+        <footer class="hlavni-footer">
+    <div class="footer-content">
         
-                </div>
-            </div>
-        </footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com" target="_blank">Facebook</a> |
+            <a href="https://www.twitter.com" target="_blank">Twitter</a> |
+            <a href="https://www.instagram.com" target="_blank">Instagram</a>
+        </div>
+    </div>
+</footer>
+
+
     </div>
 </body>
 </html>

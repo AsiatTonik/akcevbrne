@@ -1,27 +1,14 @@
+<?= $this->extend('layout/layout'); ?> 
+<?= $this->section('content'); ?>
 <!DOCTYPE html>
 <html lang="cs">
-<head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akce v Brně</title>
-    <link rel="stylesheet" href="<?= base_url('assets/css/styleudalost.css') ?>">
-</head>
+
 <body>
-    <div class="container">
-        
-        <header class="header">
-        <h1>AKCE V BRNĚ</h1>
-        <a href="http://localhost/pham/project-root/login">
-        <button class="login-button">LOGIN</button>
-        </a>
-
-        </header>
+    
 
         
-        <main class="main-content">
-            <div class="event-image"></div>
+        <main class="udalost-content">
+            <div class="udalost-image"></div>
             <div class="event-header">
                 <div class="event-date">DATUM OD - DATUM DO</div>
                 <h1 class="event-title">NÁZEV AKCE</h1>
@@ -45,9 +32,8 @@
         <div id="map" style="height: 300px; width: 100%;"></div>
 
         
-        <footer class="footer">
-            © 2024 Akce v Brně. Všechna práva vyhrazena.
-        </footer>
+      
+
     </div>
 
     <script>
@@ -67,3 +53,4 @@
     </script>
 </body>
 </html>
+<?= $this->endSection(); ?> 
