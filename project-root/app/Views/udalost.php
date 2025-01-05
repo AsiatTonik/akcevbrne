@@ -5,26 +5,24 @@
 
 <body>
     
-
-        
-        <main class="udalost-content">
-            <div class="udalost-image"></div>
+    <main class="udalost-content">
+            <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" alt="Event Image">
             <div class="event-header">
-                <div class="event-date">DATUM OD - DATUM DO</div>
-                <h1 class="event-title">NÁZEV AKCE</h1>
+            <div class="event-date"><?= date('d.m.Y', $event['date_from'] / 1000) ?> - <?= date('d.m.Y', $event['date_to'] / 1000) ?></div>
+            <h1 class="event-title"><?= $event['name'] ?></h1>
             </div>
             <div class="event-description">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p><?= $event['text'] ?? 'No description available.' ?></p>
             </div>
             <div class="event-footer">
-                <div class="event-pricing">
-                    <div><strong>VSTUPNÉ:</strong> Zdarma</div>
-                    <button class="buy-ticket-button">KOUPIT VSTUPENKY</button>
-                </div>
-                <div class="event-contact">
-                    <div><strong>ADRESA:</strong> Náměstí Svobody 1, Brno</div>
-                    <div><strong>EMAIL:</strong> info@akcevbrne.cz</div>
-                </div>
+            <div class="event-pricing">
+            <div><strong>VSTUPNÉ:</strong> <?= $event['tickets_info'] ?? 'Free' ?></div>
+            <button class="buy-ticket-button">KOUPIT VSTUPENKY</button>
+            </div>
+            <div class="event-contact">
+            <div><strong>ADRESA:</strong> <?= $event['parent_festivals'] ?? 'Not available' ?></div>
+            <div><strong>EMAIL:</strong> <?= $event['organizer_email'] ?? 'Not available' ?></div>
+            </div>
             </div>
         </main>
 

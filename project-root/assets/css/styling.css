@@ -170,8 +170,10 @@ html, body {
 }
 
 .event-image {
-    height: 150px;
-    background-color: #ddd;
+    width: 100%;
+    height: 150px; /* nebo jiná výška dle potřeby */
+    object-fit: cover; /* zajistí, že obrázek vyplní prostor a bude oříznut */
+    background-color: #ddd; /* pro případ, že obrázek nebude k dispozici */
 }
 
 .event-info {
@@ -192,6 +194,7 @@ html, body {
     cursor: pointer;
 }
 
+
 .hlavni-footer {
     background-color: #333;
     color: #fff;
@@ -202,6 +205,59 @@ html, body {
     margin-top: auto; 
 }
 
+/* Základní styly pro stránkování */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+.pagination .active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+
+.pagination a:hover {
+    background-color: #e1e1e1;
+    color: #0056b3;
+}
+
+
+.pagination .disabled {
+    background-color: #f1f1f1;
+    color: #ccc;
+    pointer-events: none;
+}
+
+
+.pagination .prev-next-btn {
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+
+.pagination .prev-next-btn {
+    border-radius: 50%;
+}
+
+
+
 /* css stranky udalosti */
 .udalost-container {
     display: grid;
@@ -210,7 +266,7 @@ html, body {
         "main"
         "map"
         "footer";
-    grid-template-rows: auto 1fr auto auto; 
+    grid-template-rows: auto 1fr auto auto;
     height: 100vh;
 }
 
@@ -223,24 +279,22 @@ html, body {
     background-color: #000;
     color: #fff;
     height: 80px;
-    
 }
 
 .udalost-content {
     grid-area: main;
     padding: 2rem;
-    max-width: 1200px; 
-    margin: 0 auto; 
+    max-width: 1200px;
+    margin: 0 auto;
     box-sizing: border-box;
 }
 
-.udalost-image {
-    width: 100%;
-    max-width: 1200px; 
-    height: 300px;
-    background-color: #ddd;
-    margin: 0 auto 2rem auto; 
-    box-sizing: border-box;
+.udalost-image img {
+    width: 100%; /* Obrázek vyplní celý dostupný prostor */
+    height: auto; /* Zachová poměr stran obrázku */
+    display: block; /* Odstraní mezery pod obrázkem */
+    object-fit: cover; /* Přizpůsobí obrázek kontejneru */
+    border-radius: 8px; /* Přidá jemné zaoblení rohů */
 }
 
 .event-header {
@@ -265,7 +319,7 @@ html, body {
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 2rem;
-    max-width: 1200px; 
+    max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -301,12 +355,12 @@ html, body {
 }
 
 .event-map {
-    grid-area: map; 
+    grid-area: map;
     width: 100%;
-    max-width: 1200px; 
-    height: 300px; 
-    background-color: #ccc; 
-    margin: 0 auto; 
+    max-width: 1200px;
+    height: 400px; /* Map space update */
+    background-color: #ccc;
+    margin: 0 auto;
     box-sizing: border-box;
 }
 
