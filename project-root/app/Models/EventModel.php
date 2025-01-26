@@ -1,42 +1,63 @@
 <?php
-class EventModel extends CI_Model {
+namespace App\Models;
 
-    public function __construct() {
-        parent::__construct();
+use CodeIgniter\Model;
+
+class EventModel extends Model {
+
+    protected $table = 'events'; 
+    protected $primaryKey = 'id'; 
+
+   
+    public function insert_category($categories_string) {
+        $categories = explode(',', $categories_string); 
+        $category_ids = [];
+    
+        foreach ($categories as $category_name) {
+            $category_name = trim($category_name); 
+            $category = $this->db->table('categories')
+                ->select('id')
+                ->where('name', $category_name)
+                ->get()
+                ->getRow();
+    
+            if (!$category) {
+                
+                $this->db->table('categories')->insert(['name' => $category_name]);
+                $category_ids[] = $this->db->insertID();
+            } else {
+                
+                $category_ids[] = $category->id;
+            }
+        }
+    
+        return $category_ids;
+    }
+    
+
+    
+    public function insert_event($event_data, $category_ids) {
+        $this->db->table('events')->insert($event_data);
+        $event_id = $this->db->insertID(); 
+    
+        
+        foreach ($category_ids as $category_id) {
+            $this->db->table('event_categories')->insert([
+                'event_id' => $event_id,
+                'category_id' => $category_id
+            ]);
+        }
+    
+        return $event_id;
     }
 
-    // Funkce pro získání událostí z externího JSON souboru
-    public function get_events($from_date = null, $to_date = null, $category = null) {
-        $json_url = 'https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/Events/FeatureServer/0/query?f=pjson&where=1%3D1'; // Tvoje URL pro JSON data
-        $json_data = file_get_contents($json_url);
-        $events = json_decode($json_data, true);
-
-        // Pokud nejsou žádná data, vrátíme prázdné pole
-        if (!$events || !isset($events['features'])) {
-            return [];
-        }
-
-        $filtered_events = $events['features'];
-
-        // Filtrování podle data
-        if ($from_date) {
-            $filtered_events = array_filter($filtered_events, function($event) use ($from_date) {
-                return $event['attributes']['date'] >= $from_date;
-            });
-        }
-        if ($to_date) {
-            $filtered_events = array_filter($filtered_events, function($event) use ($to_date) {
-                return $event['attributes']['date'] <= $to_date;
-            });
-        }
-
-        // Filtrování podle kategorie
-        if ($category) {
-            $filtered_events = array_filter($filtered_events, function($event) use ($category) {
-                return strtolower($event['attributes']['category']) == strtolower($category);
-            });
-        }
-
-        return $filtered_events;
+    
+    public function insert_geometry($event_id, $x, $y) {
+        $data = [
+            'event_id' => $event_id,
+            'x' => $x,
+            'y' => $y
+        ];
+        $this->db->table('geometry')->insert($data);
     }
 }
