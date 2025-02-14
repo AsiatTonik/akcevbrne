@@ -1,0 +1,13 @@
+{
+    "name": "pham/akcevbrne",
+    "description": "projekt",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hong Phuoc Pham"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

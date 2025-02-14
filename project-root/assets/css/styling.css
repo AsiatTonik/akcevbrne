@@ -167,9 +167,11 @@ html, body {
     transform: translateY(-5px);
 }
 .event-image {
-    height: 150px;
+    width: 100%; 
+    height: 270px; 
     background-color: #ddd;
 }
+
 .event-info {
     padding: 1rem;
 }
@@ -201,50 +203,36 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0;
+    gap: 5px;
+    margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .pagination a {
-    padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #f1f1f1;
-    border: 1px solid #ddd;
-    border-radius: 5px;
     text-decoration: none;
-    color: #007bff;
-    font-size: 16px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #000;
+    background-color: #f4f4f4;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+    font-size: 14px;
 }
-
-
-.pagination .active {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
-
 
 .pagination a:hover {
-    background-color: #e1e1e1;
-    color: #0056b3;
+    background-color: #000;
+    color: #fff;
 }
 
-
-.pagination .disabled {
-    background-color: #f1f1f1;
-    color: #ccc;
-    pointer-events: none;
-}
-
-
-.pagination .prev-next-btn {
+.pagination .active {
+    background-color: #000;
+    color: #fff;
     font-weight: bold;
-    padding: 10px 15px;
+    border: 1px solid #000;
 }
 
-
-.pagination .prev-next-btn {
-    border-radius: 50%;
+.prev-next-btn {
+    font-weight: bold;
 }
 
 
@@ -278,14 +266,23 @@ html, body {
     max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box;
+    text-align: center; 
+}
+
+.udalost-image {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-bottom: 2rem;
 }
 
 .udalost-image img {
-    width: 100%; /* Obrázek vyplní celý dostupný prostor */
-    height: auto; /* Zachová poměr stran obrázku */
-    display: block; /* Odstraní mezery pod obrázkem */
-    object-fit: cover; /* Přizpůsobí obrázek kontejneru */
-    border-radius: 8px; /* Přidá jemné zaoblení rohů */
+    width: 50%; 
+    max-width: 600px; 
+    height: auto; 
+    display: block; 
+    object-fit: cover; 
+    border-radius: 8px; 
 }
 
 .event-header {
@@ -349,11 +346,12 @@ html, body {
     grid-area: map;
     width: 100%;
     max-width: 1200px;
-    height: 400px; /* Map space update */
+    height: 400px; 
     background-color: #ccc;
     margin: 0 auto;
     box-sizing: border-box;
 }
+
 
 /* css login stranky */
 .log-container {

@@ -5,75 +5,109 @@ use App\Models\EventModel;
 
 class Home extends BaseController
 {
-    public function hlavni(): string
-    {
-        
-        $eventModel = new EventModel();
 
-        
-        $categories = $this->getCategories($eventModel);
+public function hlavni(): string
+{
+    $eventModel = new EventModel();
+    $db = \Config\Database::connect();
 
-        
-        $events = $eventModel->findAll();  
+    
+    $categories = $eventModel->getCategories();
 
-        
-        $fromDate = $this->request->getVar('from');
-        if ($fromDate) {
-            $fromDate = date('Y-m-d', strtotime($fromDate));
-            $events = array_filter($events, function($event) use ($fromDate) {
-                $eventDateFrom = date('Y-m-d', $event['date_from'] / 1000);
-                $eventDateTo = date('Y-m-d', $event['date_to'] / 1000);
-                return ($eventDateFrom == $fromDate && $eventDateTo == $fromDate);
-            });
-        }
+    
+    $selectedCategory = $this->request->getVar('category');
+    $fromDate = $this->request->getVar('from');
 
-        
-        $eventsPerPage = 9;
-        $currentPage = $this->request->getVar('page') ?? 1;
-        $offset = ($currentPage - 1) * $eventsPerPage;
-        $data['events_page'] = array_slice($events, $offset, $eventsPerPage);
-        $totalPages = ceil(count($events) / $eventsPerPage);
-        $data['total_pages'] = $totalPages;
-        $data['current_page'] = $currentPage;
+    
+    $sql = "SELECT e.* FROM events e";
+    $params = [];
 
-        
-        $data['categories'] = $categories;
-        $data['selectedCategory'] = $this->request->getVar('category');
-        $data['from'] = $fromDate;
+    if ($selectedCategory) {
+        $sql .= " JOIN event_categories ec ON e.id = ec.event_id
+                  JOIN categories c ON ec.category_id = c.id
+                  WHERE c.name = ?";
+        $params[] = $selectedCategory;
+    }
 
-        
-        return view('hlavni', $data);
+    if ($fromDate) {
+        $sql .= ($selectedCategory ? " AND" : " WHERE") . " DATE(e.date_from) = ?";
+        $params[] = $fromDate;
+    }
+
+    $query = $db->query($sql, $params);
+    $events = $query->getResultArray();
+
+    
+    $eventsPerPage = 9;
+    $currentPage = $this->request->getVar('page') ?? 1;
+    $offset = ($currentPage - 1) * $eventsPerPage;
+    $eventsPage = array_slice($events, $offset, $eventsPerPage);
+    $totalPages = ceil(count($events) / $eventsPerPage);
+
+    
+    $data = [
+        'categories' => $categories,
+        'selectedCategory' => $selectedCategory,
+        'events_page' => $eventsPage,
+        'total_pages' => $totalPages,
+        'current_page' => $currentPage,
+        'from' => $fromDate
+    ];
+
+    return view('hlavni', $data);
+}
+
+
+    
+private function getCategories($eventModel)
+{
+    $db = \Config\Database::connect();
+    
+    $query = $db->query("
+        SELECT DISTINCT c.name 
+        FROM categories c
+        JOIN event_categories ec ON c.id = ec.category_id
+    ");
+
+    $categories = array_column($query->getResultArray(), 'name');
+
+    return $categories;
+}
+
+   
+public function udalost($id): string
+{
+    $eventModel = new EventModel();
+    $event = $eventModel->find($id);
+
+    if (!$event) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Akce nebyla nalezena");
     }
 
     
-    private function getCategories($eventModel)
-    {
-        $categories = [];
-        $events = $eventModel->findAll();
-        foreach ($events as $event) {
-            $categoriesString = $event['categories'] ?? '';
-            $eventCategories = explode(',', $categoriesString);
-            $categories = array_merge($categories, $eventCategories);
-        }
-        $categories = array_map('trim', $categories);
-        return array_unique($categories);
-    }
+    $event['tickets_info'] = $event['tickets_info'] ?? 'Zdarma';
 
     
-    public function udalost($id): string
+    $latitude = isset($event['latitude']) ? $event['latitude'] : 49.1951;
+    $longitude = isset($event['longitude']) ? $event['longitude'] : 16.6068;
+
+    $data = [
+        'event' => $event,
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+    ];
+
+    return view('udalost', $data);
+}
+
+
+
+public function login()
     {
         
-        $eventModel = new EventModel();
-
         
-        $event = $eventModel->find($id);
-
-        if (!$event) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException("Akce nebyla nalezena");
-        }
-
-        
-        $data['event'] = $event;
-        return view('udalost', $data);
+        return view('login');
     }
+
+
 }

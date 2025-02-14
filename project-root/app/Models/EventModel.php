@@ -1,63 +1,44 @@
 <?php
+
 namespace App\Models;
 
 use CodeIgniter\Model;
 
-class EventModel extends Model {
-
+class EventModel extends Model
+{
     protected $table = 'events'; 
     protected $primaryKey = 'id'; 
 
+    protected $allowedFields = [
+        'object_id', 'name', 'text', 'tickets_info', 'image_url', 'first_image',
+        'event_url', 'organizer_email', 'tickets_url', 'name_en', 'text_en',
+        'event_url_en', 'tickets_url_en', 'latitude', 'longitude', 'date_from', 'date_to'
+    ];
+
    
-    public function insert_category($categories_string) {
-        $categories = explode(',', $categories_string); 
-        $category_ids = [];
-    
-        foreach ($categories as $category_name) {
-            $category_name = trim($category_name); 
-            $category = $this->db->table('categories')
-                ->select('id')
-                ->where('name', $category_name)
-                ->get()
-                ->getRow();
-    
-            if (!$category) {
-                
-                $this->db->table('categories')->insert(['name' => $category_name]);
-                $category_ids[] = $this->db->insertID();
-            } else {
-                
-                $category_ids[] = $category->id;
-            }
-        }
-    
-        return $category_ids;
-    }
-    
+    public function getCategories()
+    {
+        $db = \Config\Database::connect();
+        $query = $db->query("
+            SELECT DISTINCT c.name 
+            FROM categories c
+            JOIN event_categories ec ON c.id = ec.category_id
+        ");
 
-    
-    public function insert_event($event_data, $category_ids) {
-        $this->db->table('events')->insert($event_data);
-        $event_id = $this->db->insertID(); 
-    
-        
-        foreach ($category_ids as $category_id) {
-            $this->db->table('event_categories')->insert([
-                'event_id' => $event_id,
-                'category_id' => $category_id
-            ]);
-        }
-    
-        return $event_id;
+        return array_column($query->getResultArray(), 'name');
     }
 
-    
-    public function insert_geometry($event_id, $x, $y) {
-        $data = [
-            'event_id' => $event_id,
-            'x' => $x,
-            'y' => $y
-        ];
-        $this->db->table('geometry')->insert($data);
+   
+    public function getEventsByCategory($category)
+    {
+        $db = \Config\Database::connect();
+        $query = $db->query("
+            SELECT e.* FROM events e
+            JOIN event_categories ec ON e.id = ec.event_id
+            JOIN categories c ON ec.category_id = c.id
+            WHERE c.name = ?
+        ", [$category]);
+
+        return $query->getResultArray();
     }
 }
