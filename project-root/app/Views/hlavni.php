@@ -1,49 +1,61 @@
 <?= $this->extend('layout/layout'); ?>
 <?= $this->section('content'); ?>
 
-<div class="hlavni-container">
-<aside class="sidebar">
-<ul>
-    <li><a href="<?= base_url('/') ?>">Všechny</a></li> 
-    <?php foreach ($categories as $category): ?>
-        <li>
-            <a href="<?= base_url('?category=' . urlencode($category)) ?>" 
-               class="<?= ($category == $selectedCategory) ? 'selected' : '' ?>">
-                <?= esc($category) ?>
-            </a>
-        </li>
-    <?php endforeach; ?>
-</ul>
-</aside>
+<div class="container mt-4">
+    <div class="row">
+        
+        <aside class="col-md-3">
+            <div class="list-group">
+                <a href="<?= base_url() ?>" class="list-group-item list-group-item-action <?= empty($selectedCategory) ? 'active' : '' ?>">Všechny</a>
+                <?php foreach ($categories as $category): ?>
+                    <a href="<?= base_url('?category=' . urlencode($category['name'])) ?>" class="list-group-item list-group-item-action <?= ($category['name'] == $selectedCategory) ? 'active' : '' ?>">
+                        <?= esc($category['name']) ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </aside>
 
-    <main class="hlavni-content">
-        <div class="search-bar">
-            <form method="get">
-                <input type="date" id="from" name="from" value="<?= esc($from) ?>"> 
-                <button class="search-button" type="submit">HLEDAT</button>
-            </form>
-        </div>
+        
+        <main class="col-md-9">
+            <div class="mb-4">
+                <form method="get" class="d-flex gap-2">
+                    <input type="date" id="from" name="from" value="<?= esc($from) ?>" class="form-control">
+                    <button class="btn btn-dark" type="submit">HLEDAT</button>
+                </form>
+            </div>
 
-        <div class="events-grid">
-            <?php foreach ($events_page as $event): ?>
-                <div class="event-card">
-                    <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" alt="Obrázek akce" class="event-image">
-                    <div class="event-info">
-                        <h2><?= esc($event['name']) ?? 'Název akce' ?></h2>
-                        <p><?= !empty($event['text']) ? substr($event['text'], 0, 80) . '...' : 'Popis akce není k dispozici.' ?></p>
-                        <p><strong>Datum:</strong> <?= date('d.m.Y', strtotime($event['date_from'])) ?> - <?= date('d.m.Y', strtotime($event['date_to'])) ?></p>
-                        <a href="<?= base_url('udalost/' . $event['id']) ?>" class="more-button">Více</a>
+            <div class="row g-3">
+                <?php foreach ($events_page as $event): ?>
+                    <div class="col-md-4">
+                        <div class="card">
+                        <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" class="card-img-top img-fluid object-fit-cover" alt="Obrázek akce" style="height: 270px; width: 100%;">
+
+                            <div class="card-body">
+                                <h5 class="card-title"><?= esc($event['name']) ?? 'Název akce' ?></h5>
+                                <p class="card-text"><?= !empty($event['text']) ? substr($event['text'], 0, 80) . '...' : 'Popis akce není k dispozici.' ?></p>
+                                <p><strong>Datum:</strong> <?= date('d.m.Y', strtotime($event['date_from'])) ?> - <?= date('d.m.Y', strtotime($event['date_to'])) ?></p>
+                                <a href="<?= base_url('udalost/' . $event['id']) ?>" class="btn btn-primary">Více</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
 
-        <div class="pagination">
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?= $i ?>&category=<?= $selectedCategory ?>" class="page-btn <?= ($i == $current_page) ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-        </div>
-    </main>
+            
+            <nav class="mt-4">
+    <ul class="pagination justify-content-center flex-wrap">
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <li class="page-item <?= ($i == $current_page) ? 'active' : '' ?>">
+                <a href="?page=<?= $i ?><?= $selectedCategory ? '&category=' . urlencode($selectedCategory) : '' ?>" class="page-link">
+                    <?= $i ?>
+                </a>
+            </li>
+        <?php endfor; ?>
+    </ul>
+</nav>
+
+        </main>
+    </div>
 </div>
 
 <?= $this->endSection(); ?>

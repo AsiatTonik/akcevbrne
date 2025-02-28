@@ -15,30 +15,26 @@ class EventModel extends Model
         'event_url_en', 'tickets_url_en', 'latitude', 'longitude', 'date_from', 'date_to'
     ];
 
-   
+    // Lepší způsob získání kategorií pomocí Query Builderu
     public function getCategories()
     {
-        $db = \Config\Database::connect();
-        $query = $db->query("
-            SELECT DISTINCT c.name 
-            FROM categories c
-            JOIN event_categories ec ON c.id = ec.category_id
-        ");
-
-        return array_column($query->getResultArray(), 'name');
+        return $this->db->table('categories')
+            ->select('name')
+            ->distinct()
+            ->join('event_categories', 'categories.id = event_categories.category_id')
+            ->get()
+            ->getResultArray();
     }
 
-   
+    // Lepší způsob filtrování událostí podle kategorie
     public function getEventsByCategory($category)
     {
-        $db = \Config\Database::connect();
-        $query = $db->query("
-            SELECT e.* FROM events e
-            JOIN event_categories ec ON e.id = ec.event_id
-            JOIN categories c ON ec.category_id = c.id
-            WHERE c.name = ?
-        ", [$category]);
-
-        return $query->getResultArray();
+        return $this->db->table($this->table)
+            ->select('events.*')
+            ->join('event_categories', 'events.id = event_categories.event_id')
+            ->join('categories', 'event_categories.category_id = categories.id')
+            ->where('categories.name', $category)
+            ->get()
+            ->getResultArray();
     }
 }

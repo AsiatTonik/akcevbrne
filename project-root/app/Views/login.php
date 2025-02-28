@@ -1,35 +1,23 @@
 <?= $this->extend('layout/layout'); ?> 
 <?= $this->section('content'); ?>
-<!DOCTYPE html>
-<html lang="cs">
 
-<body>
-    <div class="log-container">
-        
-        
-        
-        
-        <main class="login-content">
-            <div class="login-container">
-                <h1>Přihlášení</h1>
-                <form action="/pham/project-root/login-process" method="POST">
-                    <label for="nickname">Jméno:</label>
-                    <input type="text" id="nickname" name="nickname" required>
-                    
-                    <label for="password">Heslo:</label>
-                    <input type="password" id="password" name="password" required>
-                    
-                    <button type="submit">Přihlásit se</button>
-                </form>
-                
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-4">Přihlášení</h2>
+        <form action="/pham/project-root/login-process" method="POST">
+            <div class="mb-3">
+                <label for="nickname" class="form-label">Jméno:</label>
+                <input type="text" id="nickname" name="nickname" class="form-control" required>
             </div>
-        </main>
-        
-
-
-
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Heslo:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn btn-dark w-100">Přihlásit se</button>
+        </form>
     </div>
-</body>
-</html>
+</div>
 
-<?= $this->endSection(); ?> 
+<?= $this->endSection(); ?>
