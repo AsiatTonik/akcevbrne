@@ -14,48 +14,50 @@ class Home extends BaseController
     }
 
     public function hlavni(): string
-    {
-        $selectedCategory = $this->request->getVar('category');
-        $fromDate = $this->request->getVar('from');
-        $currentPage = $this->request->getVar('page') ?? 1;
-        $eventsPerPage = 9;
+{
+    $selectedCategory = $this->request->getVar('category');
+    $fromDate = $this->request->getVar('from');
+    $currentPage = $this->request->getVar('page') ?? 1;
+    $eventsPerPage = 9;
 
-        
-        $categories = $this->eventModel->getCategories();
+    
+    $categories = $this->eventModel->getCategories();
 
-        
-        $query = $this->eventModel->select('*');
+    
+    $query = $this->eventModel->select('events.*, events.name AS event_name'); 
 
-        if ($selectedCategory) {
-            $query->join('event_categories ec', 'events.id = ec.event_id')
-                  ->join('categories c', 'ec.category_id = c.id')
-                  ->where('c.name', $selectedCategory);
-        }
-
-        if ($fromDate) {
-            $query->where('DATE(events.date_from)', $fromDate);
-        }
-
-        
-        $events = $query->paginate($eventsPerPage, 'default', $currentPage);
-        $totalPages = $query->pager->getPageCount();
-
-        $data = [
-            'categories' => $categories,
-            'selectedCategory' => $selectedCategory,
-            'events_page' => $events,
-            'total_pages' => $totalPages,
-            'current_page' => $currentPage,
-            'from' => $fromDate
-        ];
-
-        return view('hlavni', $data);
+    if ($selectedCategory) {
+        $query->join('event_categories ec', 'events.id = ec.event_id')
+              ->join('categories c', 'ec.category_id = c.id')
+              ->where('c.name', $selectedCategory);
     }
+
+    if ($fromDate) {
+        $query->where('DATE(events.date_from)', $fromDate);
+    }
+
+    
+    $events = $query->paginate($eventsPerPage, 'default', $currentPage);
+    $totalPages = $query->pager->getPageCount();
+
+    $data = [
+        'categories' => $categories,
+        'selectedCategory' => $selectedCategory,
+        'events_page' => $events,
+        'total_pages' => $totalPages,
+        'current_page' => $currentPage,
+        'from' => $fromDate
+    ];
+
+    return view('hlavni', $data);
+}
+
 
     public function udalost($id): string
     {
         $event = $this->eventModel->find($id);
-
+        $eventModel = new EventModel();
+        $address = $eventModel->getAddressFromCSV($latitude, $longitude);
         
 
         $data = [
@@ -71,4 +73,28 @@ class Home extends BaseController
     {
         return view('login');
     }
+
+    public function probehle(): string
+{
+    $currentDate = date('Y-m-d H:i:s'); 
+
+    $currentPage = $this->request->getVar('page') ?? 1;
+    $eventsPerPage = 9;
+
+    
+    $query = $this->eventModel->where('date_to <', $currentDate);
+    
+    
+    $events = $query->paginate($eventsPerPage, 'default', $currentPage);
+    $totalPages = $query->pager->getPageCount();
+
+    $data = [
+        'events_page' => $events,
+        'total_pages' => $totalPages,
+        'current_page' => $currentPage
+    ];
+
+    return view('probehle', $data);
+}
+
 }

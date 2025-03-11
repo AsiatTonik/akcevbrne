@@ -15,7 +15,7 @@ class EventModel extends Model
         'event_url_en', 'tickets_url_en', 'latitude', 'longitude', 'date_from', 'date_to'
     ];
 
-    // Lepší způsob získání kategorií pomocí Query Builderu
+   
     public function getCategories()
     {
         return $this->db->table('categories')
@@ -26,7 +26,7 @@ class EventModel extends Model
             ->getResultArray();
     }
 
-    // Lepší způsob filtrování událostí podle kategorie
+    
     public function getEventsByCategory($category)
     {
         return $this->db->table($this->table)
@@ -36,5 +36,29 @@ class EventModel extends Model
             ->where('categories.name', $category)
             ->get()
             ->getResultArray();
+    }
+
+
+    public function getAddressFromCSV($latitude, $longitude) {
+        $file = 'public/data/adresy.csv'; 
+
+        if (!file_exists($file)) {
+            return "";
+        }
+
+        $handle = fopen($file, 'r');
+
+        while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            $csvLat = floatval($row[1]);
+            $csvLon = floatval($row[2]);
+
+            if (abs($csvLat - $latitude) < 0.00001 && abs($csvLon - $longitude) < 0.00001) {
+                fclose($handle);
+                return "{$row[3]} {$row[4]}, {$row[5]}";
+            }
+        }
+
+        fclose($handle);
+        return "";
     }
 }

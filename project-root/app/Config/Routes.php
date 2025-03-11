@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::hlavni');
 $routes->get('udalost/(:num)', 'Home::udalost/$1');
 $routes->get('login', 'Home::login');
+$routes->get('probihlo', 'Home::probehle');
 
 
 

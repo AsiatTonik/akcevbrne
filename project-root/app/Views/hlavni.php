@@ -3,17 +3,20 @@
 
 <div class="container mt-4">
     <div class="row">
-        
-        <aside class="col-md-3">
-            <div class="list-group">
-                <a href="<?= base_url() ?>" class="list-group-item list-group-item-action <?= empty($selectedCategory) ? 'active' : '' ?>">Všechny</a>
-                <?php foreach ($categories as $category): ?>
-                    <a href="<?= base_url('?category=' . urlencode($category['name'])) ?>" class="list-group-item list-group-item-action <?= ($category['name'] == $selectedCategory) ? 'active' : '' ?>">
-                        <?= esc($category['name']) ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        </aside>
+     
+    <aside class="col-md-3">
+    <div class="list-group">
+        <a href="<?= base_url() ?>" class="list-group-item list-group-item-action <?= empty($selectedCategory) ? 'active bg-dark text-light border-0' : '' ?>">Všechny</a>
+        <?php foreach ($categories as $category): ?>
+            <a href="<?= base_url('?category=' . urlencode($category['name'])) ?>" 
+               class="list-group-item list-group-item-action border-0 <?= ($category['name'] == $selectedCategory) ? 'active bg-dark text-light' : '' ?>">
+                <?= esc($category['name']) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</aside>
+
+
 
         
         <main class="col-md-9">
@@ -31,10 +34,10 @@
                         <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" class="card-img-top img-fluid object-fit-cover" alt="Obrázek akce" style="height: 270px; width: 100%;">
 
                             <div class="card-body">
-                                <h5 class="card-title"><?= esc($event['name']) ?? 'Název akce' ?></h5>
+                            <h5 class="card-title"><?= esc($event['event_name']) ?? 'Název akce' ?></h5>
                                 <p class="card-text"><?= !empty($event['text']) ? substr($event['text'], 0, 80) . '...' : 'Popis akce není k dispozici.' ?></p>
                                 <p><strong>Datum:</strong> <?= date('d.m.Y', strtotime($event['date_from'])) ?> - <?= date('d.m.Y', strtotime($event['date_to'])) ?></p>
-                                <a href="<?= base_url('udalost/' . $event['id']) ?>" class="btn btn-primary">Více</a>
+                                <a href="<?= base_url('udalost/' . $event['id']) ?>" class="btn btn-dark">Více</a>
                             </div>
                         </div>
                     </div>
@@ -46,13 +49,18 @@
     <ul class="pagination justify-content-center flex-wrap">
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
             <li class="page-item <?= ($i == $current_page) ? 'active' : '' ?>">
-                <a href="?page=<?= $i ?><?= $selectedCategory ? '&category=' . urlencode($selectedCategory) : '' ?>" class="page-link">
+                <a href="?page=<?= $i ?><?= $selectedCategory ? '&category=' . urlencode($selectedCategory) : '' ?>" 
+                   class="page-link text-dark border-dark <?= ($i == $current_page) ? 'bg-light' : '' ?>">
                     <?= $i ?>
                 </a>
             </li>
         <?php endfor; ?>
     </ul>
 </nav>
+
+
+
+
 
         </main>
     </div>
