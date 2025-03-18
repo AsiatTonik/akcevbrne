@@ -34,8 +34,11 @@
                         <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" class="card-img-top img-fluid object-fit-cover" alt="Obrázek akce" style="height: 270px; width: 100%;">
 
                             <div class="card-body">
-                            <h5 class="card-title"><?= esc($event['event_name']) ?? 'Název akce' ?></h5>
-                                <p class="card-text"><?= !empty($event['text']) ? substr($event['text'], 0, 80) . '...' : 'Popis akce není k dispozici.' ?></p>
+                            <h5 class="card-title"><?= esc(html_entity_decode($event['name'])) ?? 'Název akce' ?></h5>
+                            <p class="card-text">
+                                <?= !empty($event['text']) ? html_entity_decode(substr($event['text'], 0, 80)) . '...' : 'Popis akce není k dispozici.' ?>
+                            </p>
+
                                 <p><strong>Datum:</strong> <?= date('d.m.Y', strtotime($event['date_from'])) ?> - <?= date('d.m.Y', strtotime($event['date_to'])) ?></p>
                                 <a href="<?= base_url('udalost/' . $event['id']) ?>" class="btn btn-dark">Více</a>
                             </div>

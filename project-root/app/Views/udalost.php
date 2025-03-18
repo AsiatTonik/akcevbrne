@@ -1,20 +1,22 @@
 <?= $this->extend('layout/layout'); ?> 
 <?= $this->section('content'); ?>
 
-    <div class="container mt-4">
-        <div class="text-center">
-            <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" class="img-fluid rounded" alt="Event Image" style="max-width: 600px;">
-        </div>
+<div class="container mt-4">
+    <div class="text-center">
+        <img src="<?= $event['first_image'] ?? 'obrazek.png' ?>" class="img-fluid rounded" alt="Event Image" style="max-width: 600px;">
+    </div>
 
-        <div class="mt-4">
-            <h1 class="text-center"><?= esc($event['name']) ?></h1>
-            <p class="text-muted text-center">
+    <div class="mt-4">
+    <h1 class="text-center"><?= esc(html_entity_decode($event['name'])) ?></h1>
+
+        <p class="text-muted text-center">
             <strong>Datum:</strong> <?= date('d.m.Y', strtotime($event['date_from'])) ?> - <?= date('d.m.Y', strtotime($event['date_to'])) ?>
         </p>
     </div>
 
     <div class="mt-4">
-        <p class="lead"><?= esc($event['text']) ?></p>
+        <p class="lead"><?= html_entity_decode($event['text']) ?></p>
+
     </div>
 
     <div class="row mt-4">
@@ -24,13 +26,19 @@
             <?php if (!empty($event['tickets_url'])): ?>
                 <a href="<?= esc($event['tickets_url']) ?>" target="_blank" class="btn btn-success">KOUPIT VSTUPENKY</a>
             <?php endif; ?>
-    </div>
+        </div>
     
         <div class="col-md-6">
             <h5>Kontakt:</h5>
             <p><strong>Email:</strong> <?= esc($event['organizer_email']) ?></p>
         </div>
     </div>
+
+    <?php if (session()->get('role') === 'admin'): ?> 
+        <div class="text-center mt-4">
+            <a href="<?= base_url('admin/edit-event/' . $event['id']) ?>" class="btn btn-warning">Editovat událost</a>
+        </div>
+    <?php endif; ?>
 
     <div id="map" class="mt-4" style="height: 300px; width: 100%;"></div>
 </div>

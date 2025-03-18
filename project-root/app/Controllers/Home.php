@@ -57,7 +57,7 @@ class Home extends BaseController
     {
         $event = $this->eventModel->find($id);
         $eventModel = new EventModel();
-        $address = $eventModel->getAddressFromCSV($latitude, $longitude);
+        
         
 
         $data = [

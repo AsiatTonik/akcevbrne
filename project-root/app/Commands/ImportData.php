@@ -32,10 +32,7 @@ class ImportData extends BaseCommand
         );
 
         
-        if (!$jsonData) {
-            CLI::error("nepodařilo se stáhnout data");
-            return;
-        }
+        
 
         
         $data = json_decode($jsonData, true);

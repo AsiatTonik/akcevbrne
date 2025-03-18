@@ -39,26 +39,5 @@ class EventModel extends Model
     }
 
 
-    public function getAddressFromCSV($latitude, $longitude) {
-        $file = 'public/data/adresy.csv'; 
-
-        if (!file_exists($file)) {
-            return "";
-        }
-
-        $handle = fopen($file, 'r');
-
-        while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            $csvLat = floatval($row[1]);
-            $csvLon = floatval($row[2]);
-
-            if (abs($csvLat - $latitude) < 0.00001 && abs($csvLon - $longitude) < 0.00001) {
-                fclose($handle);
-                return "{$row[3]} {$row[4]}, {$row[5]}";
-            }
-        }
-
-        fclose($handle);
-        return "";
-    }
+    
 }
