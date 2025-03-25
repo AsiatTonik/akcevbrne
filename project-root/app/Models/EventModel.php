@@ -15,7 +15,7 @@ class EventModel extends Model
         'event_url_en', 'tickets_url_en', 'latitude', 'longitude', 'date_from', 'date_to'
     ];
 
-   
+    
     public function getCategories()
     {
         return $this->db->table('categories')
@@ -38,6 +38,53 @@ class EventModel extends Model
             ->getResultArray();
     }
 
+    
+    public function insert_category($categoryName)
+    {
+        if (empty($categoryName)) {
+            return null;
+        }
+
+        
+        $category = $this->db->table('categories')
+            ->where('name', $categoryName)
+            ->get()
+            ->getRowArray();
+
+        
+        if (!$category) {
+            $this->db->table('categories')->insert(['name' => $categoryName]);
+            return $this->db->insertID();
+        }
+
+        return $category['id'];
+    }
 
     
+    public function insert_event($event_data, $category_id)
+    {
+        
+        $this->db->table($this->table)->insert($event_data);
+        $event_id = $this->db->insertID();
+
+        
+        if ($category_id) {
+            $this->db->table('event_categories')->insert([
+                'event_id' => $event_id,
+                'category_id' => $category_id
+            ]);
+        }
+
+        return $event_id;
+    }
+
+    
+    public function insert_geometry($event_id, $latitude, $longitude)
+    {
+        return $this->db->table('event_locations')->insert([
+            'event_id' => $event_id,
+            'latitude' => $latitude,
+            'longitude' => $longitude
+        ]);
+    }
 }

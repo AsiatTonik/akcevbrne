@@ -36,7 +36,8 @@
 
     <?php if (session()->get('role') === 'admin'): ?> 
         <div class="text-center mt-4">
-            <a href="<?= base_url('admin/edit-event/' . $event['id']) ?>" class="btn btn-warning">Editovat událost</a>
+            <a href="<?= base_url('admin/event/edit/' . $event['id']) ?>" class="btn btn-dark">Editovat</a>
+
         </div>
     <?php endif; ?>
 

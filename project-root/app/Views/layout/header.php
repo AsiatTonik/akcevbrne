@@ -4,7 +4,8 @@
 
         <?php if (session()->get('isLoggedIn')): ?>
             
-            <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger">ODHLÁSIT SE</a>
+            <a href="<?= base_url('logout') ?>" class="btn btn-danger">Odhlásit se</a>
+
         <?php else: ?>
             
             <a href="<?= base_url('login') ?>" class="btn btn-light">PŘIHLÁŠENÍ</a>

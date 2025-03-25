@@ -8,8 +8,7 @@
         <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
     <?php endif; ?>
 
-    <form action="<?= base_url('auth/processLogin') ?>" method="post"> 
-
+    <form action="<?= base_url('loginProcess') ?>" method="post">
         <div class="mb-3">
             <label for="username" class="form-label">Uživatelské jméno</label>
             <input type="text" class="form-control" id="username" name="username" required>
