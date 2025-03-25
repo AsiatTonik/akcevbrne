@@ -19,12 +19,13 @@ class Home extends BaseController
     $fromDate = $this->request->getVar('from');
     $currentPage = $this->request->getVar('page') ?? 1;
     $eventsPerPage = 9;
+    $currentDate = date('Y-m-d H:i:s'); 
 
-    
     $categories = $this->eventModel->getCategories();
 
     
-    $query = $this->eventModel->select('events.*, events.name AS event_name'); 
+    $query = $this->eventModel->select('events.*, events.name AS event_name')
+                              ->where('date_to >=', $currentDate);
 
     if ($selectedCategory) {
         $query->join('event_categories ec', 'events.id = ec.event_id')
@@ -36,7 +37,6 @@ class Home extends BaseController
         $query->where('DATE(events.date_from)', $fromDate);
     }
 
-    
     $events = $query->paginate($eventsPerPage, 'default', $currentPage);
     $totalPages = $query->pager->getPageCount();
 
@@ -51,6 +51,7 @@ class Home extends BaseController
 
     return view('hlavni', $data);
 }
+
 
 
     public function udalost($id): string

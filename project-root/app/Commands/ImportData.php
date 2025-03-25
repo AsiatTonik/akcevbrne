@@ -45,7 +45,9 @@ class ImportData extends BaseCommand
             $geometry = $item['geometry'];
 
            
-            $category_ids = $eventModel->insert_category($attributes['categories'] ?? '');
+            $category_ids = $eventModel->insert_categories($attributes['categories'] ?? '');
+
+
 
            
             $event_data = [
@@ -70,6 +72,7 @@ class ImportData extends BaseCommand
 
             
             $event_id = $eventModel->insert_event($event_data, $category_ids);
+
 
 
             if (isset($geometry['x'], $geometry['y'])) {

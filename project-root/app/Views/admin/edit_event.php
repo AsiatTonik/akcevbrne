@@ -39,7 +39,10 @@
             <input type="date" class="form-control" id="date_to" name="date_to" value="<?= date('Y-m-d', strtotime($event['date_to'])) ?>">
         </div>
 
-        <button type="submit" class="btn btn-success">Uložit změny</button>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">Uložit změny</button>
+            <a href="<?= base_url('udalost/' . $event['id']) ?>" class="btn btn-secondary">Zrušit</a>
+        </div>
     </form>
 </div>
 

@@ -39,52 +39,29 @@ class EventModel extends Model
     }
 
     
-    public function insert_category($categoryName)
-    {
-        if (empty($categoryName)) {
-            return null;
-        }
-
-        
-        $category = $this->db->table('categories')
-            ->where('name', $categoryName)
-            ->get()
-            ->getRowArray();
-
-        
-        if (!$category) {
-            $this->db->table('categories')->insert(['name' => $categoryName]);
-            return $this->db->insertID();
-        }
-
-        return $category['id'];
-    }
-
     
-    public function insert_event($event_data, $category_id)
+    public function insert_event($event_data)
     {
-        
         $this->db->table($this->table)->insert($event_data);
-        $event_id = $this->db->insertID();
-
-        
-        if ($category_id) {
-            $this->db->table('event_categories')->insert([
-                'event_id' => $event_id,
-                'category_id' => $category_id
-            ]);
-        }
-
-        return $event_id;
+        return $this->db->insertID();
     }
-
     
-    public function insert_geometry($event_id, $latitude, $longitude)
-    {
-        return $this->db->table('event_locations')->insert([
+    public function insert_geometry($event_id, $x, $y) {
+        $data = [
             'event_id' => $event_id,
-            'latitude' => $latitude,
-            'longitude' => $longitude
-        ]);
+            'x' => $x,
+            'y' => $y
+        ];
+        $this->db->table('geometry')->insert($data);
     }
+
+    public function getUpcomingEvents()
+{
+    $currentDate = date('Y-m-d H:i:s'); 
+
+    return $this->where('date_to >=', $currentDate) 
+                ->orderBy('date_from', 'ASC')
+                ->findAll();
+}
+
 }
