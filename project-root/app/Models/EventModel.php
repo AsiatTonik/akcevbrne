@@ -63,5 +63,14 @@ public function get_event_by_object_id($object_id)
         ->getRowArray(); 
 }
 
+public function get_category_by_name($category_name)
+{
+    return $this->db->table('categories')
+        ->where('name', $category_name)
+        ->get()
+        ->getRowArray();
+}
+
+
 
 }

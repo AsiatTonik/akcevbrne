@@ -65,7 +65,7 @@ class ImportData extends BaseCommand
                 $event_id = $eventModel->insert_event($event_data);
             } else {
                 
-                CLI::write("Událost s object_id {$attributes['ObjectId']} již existuje, přeskočeno.");
+                CLI::write("Událost s object_id {$attributes['ObjectId']} existuje");
             }
         }
 
