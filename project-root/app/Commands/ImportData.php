@@ -10,13 +10,12 @@ class ImportData extends BaseCommand
 {
     protected $group       = 'custom';
     protected $name        = 'import:data';
-    protected $description = 'Stáhne data z API a uloží je do databáze.';
+    protected $description = 'Stáhne data z API a uloží je do databáze.'; 
 
     public function run(array $params)
     {
         $eventModel = new EventModel();
 
-        
         $contextOptions = [
             "ssl" => [
                 "verify_peer" => false,
@@ -32,54 +31,44 @@ class ImportData extends BaseCommand
         );
 
         
-        
-
-        
         $data = json_decode($jsonData, true);
 
-
-
-      
         foreach ($data['features'] as $item) {
             $attributes = $item['attributes'];
-            $geometry = $item['geometry'];
-
-           
-            $category_ids = $eventModel->insert_categories($attributes['categories'] ?? '');
-
-
-
-           
-            $event_data = [
-                'object_id' => $attributes['ObjectId'] ?? null,
-                'name' => $attributes['name'] ?? '',
-                'text' => $attributes['text'] ?? '',
-                'tickets_info' => $attributes['tickets_info'] ?? '',
-                'image_url' => $attributes['images'] ?? '',
-                'first_image' => $attributes['first_image'] ?? '',
-                'event_url' => $attributes['url'] ?? '',
-                'organizer_email' => $attributes['organizer_email'] ?? '',
-                'tickets_url' => $attributes['tickets_url'] ?? '',
-                'name_en' => $attributes['name_en'] ?? '',
-                'text_en' => $attributes['text_en'] ?? '',
-                'event_url_en' => $attributes['url_en'] ?? '',
-                'tickets_url_en' => $attributes['tickets_url_en'] ?? '',
-                'latitude' => $attributes['latitude'] ?? null,
-                'longitude' => $attributes['longitude'] ?? null,
-                'date_from' => isset($attributes['date_from']) ? date('Y-m-d H:i:s', $attributes['date_from'] / 1000) : null,
-                'date_to' => isset($attributes['date_to']) ? date('Y-m-d H:i:s', $attributes['date_to'] / 1000) : null,
-            ];
 
             
-            $event_id = $eventModel->insert_event($event_data, $category_ids);
+            $existingEvent = $eventModel->get_event_by_object_id($attributes['ObjectId']);
 
+            
+            if (!$existingEvent) {
+                $event_data = [
+                    'object_id' => $attributes['ObjectId'] ?? null,
+                    'name' => $attributes['name'] ?? '',
+                    'text' => $attributes['text'] ?? '',
+                    'tickets_info' => $attributes['tickets_info'] ?? '',
+                    'image_url' => $attributes['images'] ?? '',
+                    'first_image' => $attributes['first_image'] ?? '',
+                    'event_url' => $attributes['url'] ?? '',
+                    'organizer_email' => $attributes['organizer_email'] ?? '',
+                    'tickets_url' => $attributes['tickets_url'] ?? '',
+                    'name_en' => $attributes['name_en'] ?? '',
+                    'text_en' => $attributes['text_en'] ?? '',
+                    'event_url_en' => $attributes['url_en'] ?? '',
+                    'tickets_url_en' => $attributes['tickets_url_en'] ?? '',
+                    'latitude' => $attributes['latitude'] ?? null,
+                    'longitude' => $attributes['longitude'] ?? null,
+                    'date_from' => isset($attributes['date_from']) ? date('Y-m-d H:i:s', $attributes['date_from'] / 1000) : null,
+                    'date_to' => isset($attributes['date_to']) ? date('Y-m-d H:i:s', $attributes['date_to'] / 1000) : null,
+                ];
 
-
-            if (isset($geometry['x'], $geometry['y'])) {
-                $eventModel->insert_geometry($event_id, $geometry['x'], $geometry['y']);
+                
+                $event_id = $eventModel->insert_event($event_data);
+            } else {
+                
+                CLI::write("Událost s object_id {$attributes['ObjectId']} již existuje, přeskočeno.");
             }
         }
 
-        CLI::write("data importována");
+        CLI::write("Data importována");
     }
 }

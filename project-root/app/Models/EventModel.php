@@ -55,5 +55,13 @@ public function getUpcomingEvents()
                 ->findAll();
 }
 
+public function get_event_by_object_id($object_id)
+{
+    return $this->db->table('events')
+        ->where('object_id', $object_id) 
+        ->get()
+        ->getRowArray(); 
+}
+
 
 }
