@@ -41,27 +41,19 @@ class EventModel extends Model
     
     
     public function insert_event($event_data)
-    {
-        $this->db->table($this->table)->insert($event_data);
-        return $this->db->insertID();
-    }
-    
-    public function insert_geometry($event_id, $x, $y) {
-        $data = [
-            'event_id' => $event_id,
-            'x' => $x,
-            'y' => $y
-        ];
-        $this->db->table('geometry')->insert($data);
-    }
-
-    public function getUpcomingEvents()
 {
-    $currentDate = date('Y-m-d H:i:s'); 
+    return $this->insert($event_data);
+}
 
-    return $this->where('date_to >=', $currentDate) 
+    
+    
+
+public function getUpcomingEvents()
+{
+    return $this->where('date_to >=', date('Y-m-d H:i:s'))
                 ->orderBy('date_from', 'ASC')
                 ->findAll();
 }
+
 
 }
